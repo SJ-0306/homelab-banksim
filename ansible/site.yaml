@@ -1,9 +1,12 @@
 ---
-- name: Create a file on remote server via SSH
+- name: server entry
   hosts: debserver
   tasks:
-    - name: Create an empty text file
-      ansible.builtin.file:
-        path: /home/swami/test.txt
-        state: touch
-        mode: "0644"
+    - name: k3s bin check
+      ansible.builtin.stat:
+        path: /usr/local/bin/k3s
+      register: k3s_check
+
+    - name: install k3s
+      ansible.builtin.shell: curl -sfL https://get.k3s.io | sh -
+      when: not k3s_check.stat.exists
