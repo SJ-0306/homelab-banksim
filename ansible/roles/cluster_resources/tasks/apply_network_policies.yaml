@@ -1,0 +1,17 @@
+- name: copy network_policies to server
+  ansible.builtin.copy:
+    src: "{{ playbook_dir }}/../kubernetes/network_policies"
+    dest: "/tmp/kubernetes/"
+    mode: "0644"
+
+- name: loop directories for manifests
+  ansible.builtin.find:
+    paths: "/tmp/kubernetes/network_policies"
+    patterns: "*.yaml"
+  register: found_yamls
+
+- name: apply namespace
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ item.path }}"
+  loop: "{{ found_yamls.files }}"

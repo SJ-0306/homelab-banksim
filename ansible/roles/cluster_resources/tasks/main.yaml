@@ -1,2 +1,5 @@
 - name: namespace creation
   ansible.builtin.include_tasks: create_namespaces.yaml
+
+- name: namespace apply creation
+  ansible.builtin.include_tasks: apply_network_policies.yaml
