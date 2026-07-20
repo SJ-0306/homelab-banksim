@@ -1,0 +1,17 @@
+- name: copy rbacs to server
+  ansible.legacy.copy:
+    src: "{{ playbook_dir }}/../kubernetes/rbac"
+    dest: "/tmp/kubernetes"
+    mode: "0644"
+
+- name: loop directories for manifests
+  ansible.builtin.find:
+    paths: "/tmp/kubernetes/rbac"
+    patterns: "*.yaml"
+  register: found_yamls
+
+- name: apply rbac
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ item.path }}"
+  loop: "{{ found_yamls.files }}"

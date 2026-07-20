@@ -3,3 +3,6 @@
 
 - name: namespace apply creation
   ansible.builtin.include_tasks: apply_network_policies.yaml
+
+- name: apply rbac
+  ansible.builtin.include_tasks: apply_rbac.yaml
